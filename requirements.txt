@@ -2,8 +2,8 @@
 
 
 #backtrader:-
-
-#django
+backtrader
+#django install versions
 Django
 #google
 tensorboard
