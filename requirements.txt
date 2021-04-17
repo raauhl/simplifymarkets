@@ -1,0 +1,12 @@
+#list of symbol,timeframe,no of share,indicators,weigth,
+
+
+#backtrader:-
+
+#django
+Django
+#google
+tensorboard
+#google-api-python-client google-auth-httplib2 google-auth-oauthlib
+google-services-api
+matplotlib == 3.2.2
