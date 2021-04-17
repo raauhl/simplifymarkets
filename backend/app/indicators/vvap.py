@@ -1,10 +1,10 @@
 from datetime import datetime
 import backtrader as bt
 
-# Create a subclass of Strategy to define the indicators and logic
-DATA
+# vvap strategy
 
-class VolumeWeightedAveragePrice(bt.Strategy):
+
+class vvap(bt.Strategy):
     plotinfo = dict(subplot=False)
 
     params = (('period', 30), )
@@ -33,11 +33,3 @@ class VolumeWeightedAveragePrice(bt.Strategy):
 
 
 
-
-cerebro = bt.Cerebro()  # create a "Cerebro" engine instance
-
-cerebro.adddata(data)  # Add the data feed
-
-cerebro.addstrategy(SmaCross)  # Add the trading strategy
-cerebro.run()  # run it all
-cerebro.plot()  # and plot it with a single command
