@@ -1,1 +1,1 @@
-import src
+py get-pip.py
