@@ -6,6 +6,7 @@ class SheetsService:
 
     # Constructor
     def __init__(self, sheetService):
+
         if SheetsService.service == None:
             SheetsService.service = sheetService
 
@@ -16,6 +17,7 @@ class SheetsService:
         response = request.execute()
         if show == True:
             print(response)
+
         return response
 
 
@@ -39,6 +41,7 @@ class SheetsService:
 
     # WRITE
     def write_sheet(self, spreadSheetId, symbol):
+
         values = [
             ['=GOOGLEFINANCE("'+symbol+'", "ALL", "01/01/1970", TODAY())']
         ]
@@ -51,3 +54,13 @@ class SheetsService:
         response = request.execute()
 
         print('writeSheet {0} cells updated.'.format(response.get('updatedCells')))
+
+    # READ
+    def read_sheet(self, spread_sheetid):
+
+        try:
+            request = SheetsService.service.spreadsheets().values().get(spreadsheetId=spread_sheetid, range='Sheet1', valueRenderOption='FORMATTED_VALUE', dateTimeRenderOption='SERIAL_NUMBER')
+            response = request.execute()
+            rows = response.get('values', [])
+            return rows
+        except Exception as e: print(e)
