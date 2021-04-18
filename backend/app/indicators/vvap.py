@@ -1,10 +1,11 @@
 from datetime import datetime
 import backtrader as bt
+import backtrade_load_file as data
 
-# vvap strategy
+# Create a subclass of Strategy to define the indicators and logic
 
 
-class vvap(bt.Strategy):
+class VolumeWeightedAveragePrice(bt.Strategy):
     plotinfo = dict(subplot=False)
 
     params = (('period', 30), )
@@ -30,6 +31,3 @@ class vvap(bt.Strategy):
 
         elif self.crossover < 0:  # in the market & cross to the downside
             self.close()  # close long position
-
-
-
