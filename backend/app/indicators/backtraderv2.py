@@ -1,30 +1,40 @@
-from datetime import datetime
 import backtrader as bt
 import sys
-
-
-#flask working
-'''
-def getInput(stock,timeframe,indicators1,comparator,indicators2):
-    
-    
-    print(input_data["stock"])
-    return input_data["stock"]
-'''
-
-# Create a subclass of Strategy to define the indicators and logic
+import inspect
+import array
+import re
+from datetime import date
 
 class SmaCross(bt.Strategy):
-    # list of parameters which are configurable for the strategy
-    params = dict(
-        pfast=10,  # period for the fast moving average
-        pslow=30   # period for the slow moving average
-    )
 
-    def __init__(self):
-        sma1 = bt.ind.SMA(period=self.p.pfast)  # fast moving average
-        sma2 = bt.ind.SMA(period=self.p.pslow)  # slow moving average
-        self.crossover = bt.ind.CrossOver(sma1, sma2)  # crossover signal
+    def __init__(self,ind1, ind2,comp): 
+        strategy_data = []
+        input = ind1
+        print(input)
+        position = re.search( '\(', input)
+        strategy1 = input[0:position.start()]
+        position2 = re.search('\)', input)
+        mystring = input[position.start()+1:position2.start()]
+        strategy_data.append([strategy1,mystring.split(",")])
+        print(strategy_data)
+        
+        input = ind2
+        print(input)
+        
+        position = re.search( '\(', input)
+        strategy2 = input[0:position.start()]
+        position2 = re.search('\)', input)
+        mystring = input[position.start()+1:position2.start()]
+        strategy_data.append([strategy2, mystring.split(",")])
+        print("strategy is ##", strategy_data)
+       
+        strategylist = []
+        for i,strategy in enumerate(strategy_data):
+            if strategy[0] == "sma":
+                sma = bt.ind.SMA(period=int(strategy[1][0]))
+                strategylist.append(sma)
+
+        self.crossover = bt.ind.CrossOver(strategylist[0], strategylist[1])
 
     def next(self):
         if not self.position:  # not in the market
@@ -35,34 +45,75 @@ class SmaCross(bt.Strategy):
             self.close()  # close long position
 
 
-def getInput(stock,timeframe,indicators1,comparator,indicators2):
-    print('#################################', file=sys.stderr)
-    print(stock, file=sys.stderr)
-    input_data = {"stock":stock,
-              "timeframe":timeframe,
-              "indicators1": indicators1,
-              "comparator" :comparator,
-              "indicators2": indicators2
-              }
-    cerebro = bt.Cerebro()  # create a "Cerebro" engine instance
+
+def getInput(stock,startday,endday,indicators1,comparator,indicators2):
+
+    startdate = date.fromisoformat(startday)
+    enddate = date.fromisoformat(endday)
+    if comparator == 'lessthan':
+        comaprator = '<'
+    elif comparator == 'greaterthan':
+        comaprator = '>'
+    else:
+         comaprator = '='
+    
+    strategy_data = []
+    #seperating strategy to name and parameters like sma(10) break to sma , 10
+    input = indicators1
+    position = re.search( '\(', input)
+    strategy1 = input[0:position.start()]
+    position2 = re.search('\)', input)
+    mystring = input[position.start():position2.start()]
+    strategy_data.append([strategy1,mystring.split(",")])
+    print(strategy_data)
+    
+    input = indicators2
+    position = re.search( '\(', input)
+    strategy2 = input[0:position.start()]
+    position2 = re.search('\)', input)
+    mystring = input[position.start():position2.start()]
+    strategy_data.append([strategy2, mystring.split(",")])
+    print("strategy is {}", strategy_data)
+
+ # create a "Cerebro" engine instance
 
 # Create a data feed
-data = bt.feeds.YahooFinanceData(dataname=stock,
-                                 fromdate=datetime(2011, 1, 1),
-                                 todate=datetime(2013, 12, 31))
+    data = bt.feeds.YahooFinanceData(dataname = stock,
+                                 fromdate=startdate,
+                                 todate=enddate)
+    cerebro = bt.Cerebro() 
+    print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
+    cerebro.adddata(data)  # Add the data feed
+    cerebro.addstrategy(SmaCross , ind1=indicators1, ind2=indicators2,comp = comparator)
+    optreturn = cerebro.run()  # run it all
+    print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
+    totalvalue = cerebro.broker.getvalue()
+    list_toreturn = { "totalvalue": totalvalue}
+    return list_toreturn
 
-cerebro.adddata(data)  # Add the data feed
-
-cerebro.addstrategy(SmaCross)  # Add the trading strategy
-cerebro.run()  # run it all
-#cerebro.plot()  # and plot it with a single command
+    cerebro.plot()
 
 if __name__ == '__main__':
+
     # Get arguments from user
-    print('#################################', file=sys.stderr)
-    stock= sys.argv[1]
-    timeframe= sys.argv[2]
-    indicators1= sys.argv[3]
-    comparator= sys.argv[4]
-    indicators2= sys.argv[5]
-    getInput(stock,timeframe,indicators1,comparator,indicators2)
+    print('#################################')
+    stock= str(sys.argv[1])
+    startdate= date.fromisoformat(sys.argv[2])
+    enddate = date.fromisoformat(sys.argv[3])
+    indicators1 = sys.argv[4]
+    comparator = sys.argv[5]
+    if comparator == 'lessthan':
+        comaprator = '<'
+    elif comparator == 'greaterthan':
+        comaprator = '>'
+    else:
+         comaprator = '='
+    indicators2= sys.argv[6]
+    final_portfolio = getInput(stock,startdate,enddate,indicators1,comparator,indicators2)
+    print('Return value is %.2f' % final_portfolio)
+
+
+
+
+
+
