@@ -12,3 +12,8 @@ google-services-api
 matplotlib == 3.2.2
 google-cloud
 # add all the dependencies
+https://github.com/blampe/IbPy/archive/master.zip
+
+#for develpment
+flask-wtf
+flask

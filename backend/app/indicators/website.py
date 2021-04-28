@@ -19,10 +19,12 @@ def result():
         indicators1=request.form.get('indicators1', default_name)
         comparator =request.form.get('comparator', default_name)
         indicators2=request.form.get('indicators2', default_name)
-        print(stock, file=sys.stderr)
+        stoploss=request.form.get('stoploss', default_name)
+        targetprofit=request.form.get('targetprofit', default_name)
+        #print(stock, file=sys.stderr)
         #from backtraderv2 import getInput
         #print("backtraderv2.py " + email + " " + email1)
-        result = getInput(stock, startdate, enddate, indicators1,comparator, indicators2)
+        result = getInput(stock, startdate, enddate, indicators1,comparator, indicators2,stoploss,targetprofit)
         
         return render_template("result.html",result = result)
 
