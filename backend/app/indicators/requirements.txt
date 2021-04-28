@@ -1,0 +1,9 @@
+#py -m pip install -r requirements.txt
+
+
+matplotlib == 3.2.2
+#for develpment
+flask-wtf
+flask
+requests
+backtrader

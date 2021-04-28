@@ -43,7 +43,7 @@ class SheetsService:
     def write_sheet(self, spreadSheetId, symbol):
 
         values = [
-            ['=GOOGLEFINANCE("'+symbol+'", "ALL", "01/01/1970", TODAY())']
+            ['=GOOGLEFINANCE("NSE:'+symbol+'", "ALL", "01/01/1970", TODAY())']
         ]
         body = {
             'values' : values

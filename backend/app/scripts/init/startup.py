@@ -5,19 +5,7 @@ import googleServices
 import time
 from utility.Common import * 
 from utility.File import *
-
-
-# CREATE the SHEET with FORMULA for every SYMBOL and write the index(symbol, spreadSheetId)
-def bootstrapStocksData(sheetService):
-    try:
-        for i in range(len(symbolsList)):
-            time.sleep(8)
-            print(str(i+1)+' ', end="")
-            spreadSheetId = createSheet(sheetService)
-            #writeSheet(sheetService, spreadSheetId, symbolsList[i])
-    except:
-        #writeIndex(index)
-        print('Index Created till : '+i)
+import json
 
 
 def main():
@@ -64,3 +52,24 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    """
+    try:
+        see = False
+        for symbol, spread_sheetid in data.items():
+            #print(symbol)
+            #if symbol == 'MARUTI':
+                #see = True
+            data = sheetsService.read_sheet(spread_sheetid)
+            commonUtil.sizeOf(data)
+            #print(data)
+
+            break
+
+            if see == True:
+                sheetsService.write_sheet(spread_sheetid, symbol)
+                print(symbol + ": success")
+                time.sleep(10)
+                
+    except Exception as e: print(e)
+    """
