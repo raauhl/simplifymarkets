@@ -29,6 +29,7 @@ import io
 import logging
 import sys
 
+from datetime import date
 
 PY2 = sys.version_info.major == 2
 if PY2:
@@ -173,10 +174,10 @@ def parse_args():
     parser.add_argument('--timeframe', default='d',
                         help='Timeframe: d -> day, w -> week, m -> month')
 
-    parser.add_argument('--fromdate', required=True,
+    parser.add_argument('--fromdate', nargs="?" ,default='default',
                         help='Starting date in YYYY-MM-DD format')
 
-    parser.add_argument('--todate', required=True,
+    parser.add_argument('--todate', nargs="?" ,default='default',
                         help='Ending date in YYYY-MM-DD format')
 
     parser.add_argument('--outfile', required=True,
@@ -184,15 +185,28 @@ def parse_args():
 
     return parser.parse_args()
 
-
-if __name__ == '__main__':
-
-    args = parse_args()
-
+def input_args(ticker, outfile,timeframe="d",fromdate="default",todate="default"):
+    parser = {"ticker" : ticker, "timeframe" : timeframe, "fromdate": fromdate ,"todate" : todate, "outfile": outfile}
+    return parser
+    
+def main(ticker, outfile,timeframe="d",fromdate="default",todate="default",reverse="False"):
+ #args = parse_args()
+    #args = input_args()
+    try:
+        args = {"ticker" : ticker, "timeframe" : timeframe, "fromdate": fromdate ,"todate" : todate, "outfile": outfile,"reverse": reverse}
+    except:
+        print("An exception occurred")
+    print(args)
+    start = date(date.today().year, date.today().month, date.today().day)
     logging.info('Processing input parameters')
     logging.info('Processing fromdate')
     try:
-        fromdate = datetime.datetime.strptime(args.fromdate, '%Y-%m-%d')
+        if args['fromdate'] == "default":
+            print("not given from date")
+            fromdate = datetime.datetime.strptime("1990-01-01", "%Y-%m-%d")
+        else:
+            print("given from date")
+            fromdate = datetime.datetime.strptime(args.fromdate, '%Y-%m-%d')
     except Exception as e:
         logging.error('Converting fromdate failed')
         logging.error(str(e))
@@ -200,22 +214,31 @@ if __name__ == '__main__':
 
     logging.info('Processing todate')
     try:
-        todate = datetime.datetime.strptime(args.todate, '%Y-%m-%d')
+        
+        if args['todate'] == 'default':
+            print("in default")
+            today =  str(datetime.date.today())
+            #today = '2020-01-01'
+            todate = datetime.datetime.strptime(today, '%Y-%m-%d')
+            print(todate)
+        else:
+            print("given to date")
+            todate = datetime.datetime.strptime(args.todate, '%Y-%m-%d')
     except Exception as e:
         logging.error('Converting todate failed')
         logging.error(str(e))
         sys.exit(1)
 
     logging.info('Do Not Reverse flag status')
-    reverse = args.reverse
+    reverse = args['reverse']
 
     logging.info('Downloading from yahoo')
     try:
         yahoodown = YahooDownload(
-            ticker=args.ticker,
+            ticker=args['ticker'],
             fromdate=fromdate,
             todate=todate,
-            period=args.timeframe,
+            period=args['timeframe'],
             reverse=reverse)
 
     except Exception as e:
@@ -225,7 +248,7 @@ if __name__ == '__main__':
 
     logging.info('Opening output file')
     try:
-        ofile = io.open(args.outfile, 'w')
+        ofile = io.open(args['outfile'], 'w')
     except IOError as e:
         logging.error('Error opening output file')
         logging.error(str(e))
@@ -241,3 +264,7 @@ if __name__ == '__main__':
 
     logging.info('All operations completed successfully')
     sys.exit(0)
+    
+if __name__ == '__main__':
+    main()
+   
