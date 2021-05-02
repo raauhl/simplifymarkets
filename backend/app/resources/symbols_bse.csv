@@ -46,7 +46,7 @@ Security Code,Issuer Name,Security Id,Security Name,Status,Group,Face Value,ISIN
 500101,,ARVIND,ARVIND LTD.,Active,A ,10.00,INE034A01011,Textiles,Equity
 500102,,BALLARPUR,BALLARPUR INDUSTRIES LTD.,Active,Z ,2.00,INE294A01037,Paper & Paper Products,Equity
 500103,,BHEL,BHARAT HEAVY ELECTRICALS LTD.,Active,A ,2.00,INE257A01026,Heavy Electrical Equipment,Equity
-500104,,HINDPETRO*,HINDUSTAN PETROLEUM CORPORATION LTD.,Active,A ,10.00,INE094A01015,Refineries/ Petro-Products,Equity
+500104,,HINDPETRO,HINDUSTAN PETROLEUM CORPORATION LTD.,Active,A ,10.00,INE094A01015,Refineries/ Petro-Products,Equity
 500106,,IFCI,IFCI LTD.,Active,A ,10.00,INE039A01010,Financial Institutions,Equity
 500108,,MTNL,MAHANAGAR TELEPHONE NIGAM LTD.,Active,B ,10.00,INE153A01019,Telecom Services,Equity
 500109,,MRPL,MANGALORE REFINERY & PETROCHEMICALS LTD.,Active,A ,10.00,INE103A01014,Refineries/ Petro-Products,Equity
@@ -950,7 +950,7 @@ Security Code,Issuer Name,Security Id,Security Name,Status,Group,Face Value,ISIN
 512634,,SAVERA,SAVERA INDUSTRIES LTD.,Active,X ,10.00,INE104E01014,Hotels,Equity
 513005,,VBCFERROQ,VBC FERRO ALLOYS LTD.-$,Active,XT,10.00,INE114E01013,Iron & Steel/Interm.Products,Equity
 513010,,TATASTLLP,Tata Steel Long Products Ltd,Active,A ,10.00,INE674A01014,Iron & Steel/Interm.Products,Equity
-513023,,NBVENTURES*,NAVA BHARAT VENTURES LTD.,Active,A ,2.00,INE725A01022,Electric Utilities,Equity
+513023,,NBVENTURES,NAVA BHARAT VENTURES LTD.,Active,A ,2.00,INE725A01022,Electric Utilities,Equity
 513039,,ZHINUDYP,HINDUSTHAN UDYOG LTD.,Active,XT,10.00,INE582K01018,Industrial Machinery,Equity
 513043,,REMIEDEL,Remi Edelstahl Tubulars Limited,Active,X ,10.00,INE158G01015,Iron & Steel Products,Equity
 513059,,GSAUTO,G.S.AUTO INTERNATIONAL LTD.,Active,X ,5.00,INE736H01024,Auto Parts & Equipment,Equity
@@ -1781,7 +1781,7 @@ Security Code,Issuer Name,Security Id,Security Name,Status,Group,Face Value,ISIN
 530067,,CSLFINANCE,CSL Finance Ltd,Active,X ,10.00,INE718F01018,Finance (including NBFCs),Equity
 530073,,SANGHVIMOV,SANGHVI MOVERS LTD.,Active,B ,2.00,INE989A01024,Transport Related Services,Equity
 530075,,SELAN,SELAN EXPLORATION TECHNOLOGY LTD.-$,Active,B ,10.00,INE818A01017,Exploration & Production,Equity
-530077,,FRSHTRP*,FRESHTROP FRUITS LTD.,Active,X ,10.00,INE795D01011,Other Agricultural Products,Equity
+530077,,FRSHTRP,FRESHTROP FRUITS LTD.,Active,X ,10.00,INE795D01011,Other Agricultural Products,Equity
 530079,,FAZE3Q,FAZE THREE LTD.-$,Active,X ,10.00,INE963C01033,Textiles,Equity
 530095,,PRADHIN,Pradhin Ltd,Active,X ,10.00,INE656B01019,Iron & Steel/Interm.Products,Equity
 530109,,ANUPAM,Anupam Finserv Ltd,Active,X ,10.00,INE069B01015,Finance (including NBFCs),Equity
@@ -2560,7 +2560,7 @@ Security Code,Issuer Name,Security Id,Security Name,Status,Group,Face Value,ISIN
 532700,,ENIL,ENTERTAINMENT NETWORK (INDIA) LTD.,Active,B ,10.00,INE265F01028,Broadcasting & Cable TV,Equity
 532701,,CELLA,Cella Space Ltd,Active,Z ,10.00,INE266H01014,Paper & Paper Products,Equity
 532702,,GSPL,GUJARAT STATE PETRONET LTD.,Active,A ,10.00,INE246F01010,Utilities:Non-Elec.,Equity
-532705,,JAGRAN*,JAGRAN PRAKASHAN LTD.,Active,A ,2.00,INE199G01027,Publishing,Equity
+532705,,JAGRAN,JAGRAN PRAKASHAN LTD.,Active,A ,2.00,INE199G01027,Publishing,Equity
 532706,,INOXLEISUR,INOX LEISURE LTD.,Active,A ,10.00,INE312H01016,Specialty Retail,Equity
 532707,,DYNPRO,DYNEMIC PRODUCTS LTD.,Active,B ,10.00,INE256H01015,Specialty Chemicals,Equity
 532710,,SADBHAV,SADBHAV ENGINEERING LTD.,Active,A ,1.00,INE226H01026,Construction & Engineering,Equity
@@ -2662,7 +2662,7 @@ Security Code,Issuer Name,Security Id,Security Name,Status,Group,Face Value,ISIN
 532847,,HILTON,HILTON METAL FORGING LTD.,Active,T ,10.00,INE788H01017,Other Industrial Products,Equity
 532848,,DELTACORP,DELTA CORP LTD.,Active,A ,1.00,INE124G01033,Misc.Commercial Services,Equity
 532850,,MIC,MIC ELECTRONICS LTD.,Active,B ,2.00,INE287C01029,Electronic Components,Equity
-532851,,INSECTICID*,INSECTICIDES (INDIA) LTD.,Active,A ,10.00,INE070I01018,Agrochemicals,Equity
+532851,,INSECTICID,INSECTICIDES (INDIA) LTD.,Active,A ,10.00,INE070I01018,Agrochemicals,Equity
 532852,,MCDHOLDING,MCDOWELL HOLDINGS LTD.,Active,B ,10.00,INE836H01014,Investment Companies,Equity
 532853,,ASAHISONG,ASAHI SONGWON COLORS LTD.,Active,B ,10.00,INE228I01012,Specialty Chemicals,Equity
 532854,,NITINFIRE,NITIN FIRE PROTECTION INDUSTRIES LTD.,Active,Z ,2.00,INE489H01020,Industrial Machinery,Equity
@@ -2746,7 +2746,7 @@ Security Code,Issuer Name,Security Id,Security Name,Status,Group,Face Value,ISIN
 532983,,RPGLIFE,RPG LIFE SCIENCES LTD.,Active,B ,8.00,INE105J01010,Pharmaceuticals,Equity
 532985,,KTKSENSEX,KOTAK SENSEX ETF,Active,B ,10.00,INF373I01031,Other Financial Services,Equity
 532986,,NIRAJ,NIRAJ CEMENT STRUCTURALS LTD.,Active,B ,10.00,INE368I01016,Construction & Engineering,Equity
-532987,,RBL*,RANE BRAKE LINING LTD.,Active,B ,10.00,INE244J01017,Auto Parts & Equipment,Equity
+532987,,RBL,RANE BRAKE LINING LTD.,Active,B ,10.00,INE244J01017,Auto Parts & Equipment,Equity
 532988,,RANEENGINE,RANE ENGINE VALVE LTD.,Active,B ,10.00,INE222J01013,Auto Parts & Equipment,Equity
 532989,,BAFNAPHARM,BAFNA PHARMACEUTICALS LTD.,Active,B ,10.00,INE878I01022,Pharmaceuticals,Equity
 532992,,CHLLTD,CHL LTD.,Active,X ,2.00,INE790D01020,Hotels,Equity
