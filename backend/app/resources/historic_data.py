@@ -263,7 +263,7 @@ def main(ticker, outfile,timeframe="d",fromdate="default",todate="default",rever
         sys.exit(1)
 
     logging.info('All operations completed successfully')
-    sys.exit(0)
+    #sys.exit(0)
     
 if __name__ == '__main__':
     main()
