@@ -9,3 +9,5 @@ django
 djangorestframework
 requests
 TA-Lib
+scipy
+pandas

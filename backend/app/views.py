@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import backtrader as bt
+import pandas as pd
 from backtrader import cerebro
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -14,35 +15,106 @@ from .models import employee, knowledge
 from .serializers import (UserSerializer, employeesSerializer,
                           knowledgeSerializer)
 from .utility.File import File
-from ta.trend import SMAIndicator
-import pandas as pd
+
+# pd.set_option('display.max_rows', None)
+
 
 stock_data_feed = StockDataFeed()
 file = File()
-knowledge_db = file.read(file_name = 'knowledge_db', path =  settings.BASE_DIR + '\\app\\resources\\', extension = 'json');
-holdings = file.read(path='C:\\Users\\91880\\Downloads', file_name='holdings', extension='csv')
+knowledge_db = file.read(file_name='knowledge_db',
+                         path=settings.BASE_DIR + '\\app\\resources\\', extension='json')
+holdings = file.read(path='C:\\Users\\91880\\Downloads',
+                     file_name='holdings', extension='csv')
+
+
+class ExecutionTime():
+    def __init__(self, method_name):
+        self.method_name = method_name
+
+    def start(self):
+        self.start_time = datetime.now()
+
+    def finish(self):
+        self.finish_time = datetime.now()
+        execution_time = (self.finish_time -
+                          self.start_time).total_seconds() * 1000
+        print('\nAPI: ' + self.method_name + ', Latency: ' +
+              str(execution_time) + ' ms\n', flush=True)
+
 
 class SMA(APIView):
 
     def get(self, request):
-        start_time = datetime.now()
+        execution_time = ExecutionTime('SMA.GET')
+        execution_time.start()
 
-        data = stock_data_feed.get_data(['ITC'])
-        itc = data['ITC']
-        
-        df = pd.DataFrame(data=itc[1:5], columns=itc[0])
-        df.Close = pd.to_numeric(df.Close, downcast="float")
-        op = df.Close.rolling(2).mean()
-        
-        #result = df[4].rolling(50).mean()
-        return Response(op)
+        symbols_list = []
+        for row in holdings:
+            symbols_list.append(row[0])
+
+        data = stock_data_feed.get_data(['HDFCBANK'])
+        print(data, flush=True)
+        for symbol in data:
+            data_frame = data[symbol]
+            window = 150
+            data_frame['Sma50'] = data_frame.Close.rolling(
+                window=window).mean().round(2).fillna(0)
+            blob = data_frame[['Close', 'Sma50']]
+            blob = blob[window-1:]
+
+            count = 0
+            prev = 0
+            position = False
+            total_profit_perc = 0
+            total_loss_perc = 0
+            trades = 0
+
+            print('\n\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('| {0:>8}    |  {1:>8}    |  {2:>8}    |    {3:>8}    |'.format(
+                'BUY', 'SELL', 'PnL', 'Pnl (%)'))
+            print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+
+            for (idx, row) in blob.iterrows():
+                count += 1
+                if count == 1:
+                    prev = row.Sma50
+                    continue
+
+                if not position and prev < row.Sma50:
+                    position = True
+                    trades += 1
+                    buy_price = row.Close
+                    # print('BUY: {0}'.format(row.Close))
+
+                if position and prev > row.Sma50:
+                    position = False
+                    pnl = round(row.Close - buy_price, 2)
+                    pnl_perc = round(pnl/buy_price * 100.0)
+
+                    if pnl_perc > 0:
+                        total_profit_perc += pnl_perc
+                    elif pnl_perc < 0:
+                        total_loss_perc += pnl_perc
+
+                    print('|{0:>10}   |  {1:>8}    |  {2:>8}    |  {3:>8} %    |'.format(
+                        '{:.2f}'.format(buy_price), '{:.2f}'.format(row.Close), '{:.2f}'.format(pnl), '{:.2f}'.format(pnl_perc)))
+
+                prev = row.Sma50
+
+            print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+            print('\nSymbol: {0} \nTrades: {1} \nProfit Perc Sum: {2} \nLoss Perc Sum: {3} \nAvg Per Trade: {4} %'.format(
+                symbol, trades, total_profit_perc, total_loss_perc, (total_profit_perc + total_loss_perc) / trades))
+
+        execution_time.finish()
+        # print(data_frame, flush=True)
+        return Response(data_frame)
 
 
 class highest(APIView):
 
     def get(self, request):
         start_time = datetime.now()
-        
+
         # print("Calculating High ...", flush=True)
         # table = knowledge.objects.all()
         # result = knowledgeSerializer(table, many = True)
@@ -66,7 +138,7 @@ class highest(APIView):
                 highest_price = -1
                 hp_datetime = None
                 hp_idx = 0
-                for i in range(1,len(symbol_data)):
+                for i in range(1, len(symbol_data)):
                     # print(hdfc_data[i], flush=True)
                     if float(symbol_data[i][4]) > float(highest_price):
                         highest_price = symbol_data[i][4]
@@ -75,7 +147,8 @@ class highest(APIView):
 
                 highest_price = float(highest_price)
                 curr_price = float(symbol_data[len(symbol_data)-1][4])
-                perc_change_from_high = round(((curr_price - highest_price) / highest_price) * 100, 2)
+                perc_change_from_high = round(
+                    ((curr_price - highest_price) / highest_price) * 100, 2)
                 number_of_days = len(symbol_data)-1-hp_idx
 
                 blob['highest_price'] = highest_price
@@ -85,7 +158,6 @@ class highest(APIView):
                 result[symbol] = blob
             except Exception as e:
                 print(e)
-
 
         finish_time = datetime.now()
         execution_time = (finish_time - start_time).total_seconds() * 1000
@@ -187,3 +259,37 @@ class SmaCross(bt.Strategy):
 
         elif self.crossover < 0:  # in the market & cross to the downside
             self.close()  # close long position
+
+
+"""
+balance = 0
+invested = False
+buy_price = 0
+trades = 0
+total_profit_perc = 0
+total_loss_perc = 0
+
+for (idx, row) in blob.iterrows():
+    close_price = row.Close
+    sma50 = row.Sma50
+
+    if invested == False and close_price > sma50:
+        buy_price = close_price
+        trades += 1
+        invested = True
+    elif invested == True and close_price < sma50:
+        pnl = close_price - buy_price
+        pnl_perc = (pnl/buy_price) * 100
+
+        if pnl > 0:
+            total_profit_perc += pnl_perc
+        elif pnl < 0:
+            total_loss_perc += pnl_perc
+
+        balance += pnl
+        print('PnL: {0}, {1}%, BAL: {2}'.format(pnl, pnl_perc, balance))
+        invested = False
+
+print('Avg profit: {0}, Avg Loss: {1}'.format(total_profit_perc/trades, total_loss_perc/trades))
+print('BALANCE: ' + str(balance))
+"""
